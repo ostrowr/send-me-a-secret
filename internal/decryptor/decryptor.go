@@ -1,29 +1,19 @@
-package main
+package decryptor
 
 import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/x509"
-	"encoding/base64"
 	"encoding/pem"
-	"fmt"
-
-	"github.com/ostrowr/send-me-a-secret/utils"
 )
 
-func main() {
-	encodedCiphertext, err := utils.GetMessageFromStdin()
-	utils.FatallyLogOnError("Could not read ciphertext", err)
-	ciphertext, err := base64.StdEncoding.DecodeString(string(encodedCiphertext))
-	utils.FatallyLogOnError("Could not decode base64 ciphertext", err)
-	password, err := utils.ReadPassword("Enter password: ")
-	utils.FatallyLogOnError("Could not read password", err)
+func Decrypt(ciphertext []byte, password []byte) ([]byte, error) {
 	privateKey, err := pemToPrivateKey([]byte(privateKeyPem), password)
-	utils.FatallyLogOnError("Could not parse private key", err)
-	message, err := decrypt(privateKey, ciphertext)
-	utils.FatallyLogOnError("Failed to decrypt", err)
-	fmt.Println(string(message))
+	if err != nil {
+		return nil, err
+	}
+	return decrypt(privateKey, ciphertext)
 }
 
 func pemToPrivateKey(priv []byte, password []byte) (*rsa.PrivateKey, error) {

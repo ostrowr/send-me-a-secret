@@ -13,7 +13,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/ostrowr/send-me-a-secret/utils"
+	"github.com/ostrowr/send-me-a-secret/internal/utils"
 	"golang.org/x/term"
 )
 
@@ -25,9 +25,9 @@ func main() {
 	keyPair, err := generateKeyPair(password)
 	utils.FatallyLogOnError("Could not generate key pair", err)
 	fmt.Println("New key pair generated.")
-	err = fillTemplateFile("./decrypt/privateKey.go.template", keyPair)
+	err = fillTemplateFile("./internal/decryptor/privateKey.go.template", keyPair)
 	utils.FatallyLogOnError("Could not fill private key file", err)
-	err = fillTemplateFile("./encrypt/publicKey.go.template", keyPair)
+	err = fillTemplateFile("./internal/encryptor/publicKey.go.template", keyPair)
 	utils.FatallyLogOnError("Could not fill public key file", err)
 }
 

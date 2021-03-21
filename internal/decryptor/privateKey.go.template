@@ -1,3 +1,3 @@
-package main
+package decryptor
 
 const privateKeyPem = `{{.PrivateKeyPem}}`

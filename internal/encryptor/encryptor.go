@@ -1,4 +1,4 @@
-package main
+package encryptor
 
 import (
 	"crypto/rand"
@@ -7,30 +7,18 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/pem"
-	"fmt"
-
-	"github.com/ostrowr/send-me-a-secret/utils"
-	"github.com/webview/webview"
 )
 
-func main() {
+func Encrypt(message []byte) (string, error) {
 	publicKey, err := pemToPublicKey([]byte(publicKeyPem))
-	utils.FatallyLogOnError("Could not parse public key", err)
-	message, err := utils.GetMessageFromStdin()
-	utils.FatallyLogOnError("Could not read message", err)
+	if err != nil {
+		return "", err
+	}
 	ciphertext, err := encrypt(publicKey, message)
-	utils.FatallyLogOnError("Failed to encrypt", err)
-	fmt.Println(ciphertext)
-}
-
-func openWebview() {
-	debug := true
-	w := webview.New(debug)
-	defer w.Destroy()
-	w.SetTitle("Minimal webview example")
-	w.SetSize(800, 600, webview.HintNone)
-	w.Navigate("https://en.m.wikipedia.org/wiki/Main_Page")
-	w.Run()
+	if err != nil {
+		return "", err
+	}
+	return ciphertext, nil
 }
 
 func pemToPublicKey(pub []byte) (*rsa.PublicKey, error) {

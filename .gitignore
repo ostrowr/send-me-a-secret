@@ -4,3 +4,4 @@ encrypt
 decrypt
 send-me-a-secret
 build/
+*.wasm
