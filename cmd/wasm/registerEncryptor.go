@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"syscall/js"
 
 	"github.com/ostrowr/send-me-a-secret/internal/encryptor"
@@ -23,7 +22,6 @@ func encryptWrapper() js.Func {
 }
 
 func main() {
-	fmt.Println("Go Web Assembly")
 	js.Global().Set("encrypt", encryptWrapper())
 	<-make(chan bool) // never exit
 }
