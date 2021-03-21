@@ -18,6 +18,15 @@ func main() {
 	if err != nil {
 		panic(err) // todo
 	}
+	message := utils.GetMessageFromStdin()
+	ciphertext, err := encrypt(publicKey, message)
+	if err != nil {
+		panic(err) // todo
+	}
+	fmt.Println(ciphertext)
+}
+
+func openWebview() {
 	debug := true
 	w := webview.New(debug)
 	defer w.Destroy()
@@ -25,12 +34,6 @@ func main() {
 	w.SetSize(800, 600, webview.HintNone)
 	w.Navigate("https://en.m.wikipedia.org/wiki/Main_Page")
 	w.Run()
-	message := utils.GetMessageFromStdin()
-	ciphertext, err := encrypt(publicKey, message)
-	if err != nil {
-		panic(err) // todo
-	}
-	fmt.Println(ciphertext)
 }
 
 func pemToPublicKey(pub []byte) (*rsa.PublicKey, error) {
