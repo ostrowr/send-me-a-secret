@@ -16,14 +16,23 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	generatePrivateKey(password)
+	keyPair, err := generateKeyPair(password)
+	if err != nil {
+		panic(err) // todo
+	}
+	fmt.Println(keyPair)
 }
 
-func generatePrivateKey(password []byte) error {
+type KeyPair struct {
+	privateKeyPem string
+	publicKeyPem  string
+}
+
+func generateKeyPair(password []byte) (*KeyPair, error) {
 	rng := rand.Reader
 	privateKey, err := rsa.GenerateKey(rng, 4096)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	block := &pem.Block{
@@ -39,12 +48,12 @@ func generatePrivateKey(password []byte) error {
 		x509.PEMCipherAES256,
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	privateKeyPem := pem.EncodeToMemory(encryptedBlock)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	publicKeyPem := pem.EncodeToMemory(
 		&pem.Block{
@@ -52,27 +61,7 @@ func generatePrivateKey(password []byte) error {
 			Bytes: x509.MarshalPKCS1PublicKey(&privateKey.PublicKey),
 		},
 	)
-	fmt.Println(string(privateKeyPem))
-	fmt.Println(string(publicKeyPem))
-
-	return nil
+	return &KeyPair{
+		privateKeyPem: string(privateKeyPem), publicKeyPem: string(publicKeyPem),
+	}, nil
 }
-
-// func encrypt(message string) {
-// 	secretMessage := []byte("send reinforcements, we're going to advance")
-// 	label := []byte("orders")
-
-// 	// crypto/rand.Reader is a good source of entropy for randomizing the
-// 	// encryption function.
-// 	rng := rand.Reader
-
-// 	ciphertext, err := rsa.EncryptOAEP(sha256.New(), rng, &test2048Key.PublicKey, secretMessage, label)
-// 	if err != nil {
-// 		fmt.Fprintf(os.Stderr, "Error from encryption: %s\n", err)
-// 		return
-// 	}
-
-// 	// Since encryption is a randomized function, ciphertext will be
-// 	// different each time.
-// 	fmt.Printf("Ciphertext: %x\n", ciphertext)
-// }
