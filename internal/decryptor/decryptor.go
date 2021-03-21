@@ -32,5 +32,5 @@ func pemToPrivateKey(priv []byte, password []byte) (*rsa.PrivateKey, error) {
 
 func decrypt(privateKey *rsa.PrivateKey, ciphertext []byte) ([]byte, error) {
 	rng := rand.Reader
-	return rsa.DecryptOAEP(sha256.New(), rng, privateKey, ciphertext, []byte("todo"))
+	return rsa.DecryptOAEP(sha256.New(), rng, privateKey, ciphertext, nil)
 }

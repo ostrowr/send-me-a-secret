@@ -29,7 +29,7 @@ func pemToPublicKey(pub []byte) (*rsa.PublicKey, error) {
 func encrypt(publicKey *rsa.PublicKey, message []byte) (string, error) {
 	rng := rand.Reader
 
-	ciphertext, err := rsa.EncryptOAEP(sha256.New(), rng, publicKey, message, []byte("todo"))
+	ciphertext, err := rsa.EncryptOAEP(sha256.New(), rng, publicKey, message, nil)
 	if err != nil {
 		return "", err
 	}
