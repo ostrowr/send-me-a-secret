@@ -46,7 +46,7 @@ func fillTemplateFile(path string, data interface{}) error {
 		return err
 	}
 	defer f.Close()
-	err = t.Execute(f, data)
+	err = t.Option("missingkey=error").Execute(f, data)
 	if err != nil {
 		return err
 	}
