@@ -1,7 +1,5 @@
 publicKey.go
 privateKey.go
-encrypt
-decrypt
 send-me-a-secret
 build/
 *.wasm
