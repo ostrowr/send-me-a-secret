@@ -5,6 +5,7 @@
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
   "compilerOptions": {
     "strict": true,
-    "typeRoots": ["src/ts-definitions"]
+    "typeRoots": ["src/ts-definitions"],
+    "sourceMap": true
   }
 }

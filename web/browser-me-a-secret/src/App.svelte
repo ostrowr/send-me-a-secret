@@ -2,7 +2,7 @@
 	let encryptor: ((message: string) => string) | undefined;
 	const go = new Go();
 	WebAssembly.instantiateStreaming(
-		fetch("/registerEncryptor.wasm"),
+		fetch("./registerEncryptor.wasm"),
 		go.importObject
 	).then((result) => {
 		go.run(result.instance);
