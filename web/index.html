@@ -5,7 +5,7 @@
     <script>
       const go = new Go();
       WebAssembly.instantiateStreaming(
-        fetch("encrypt.wasm"),
+        fetch("registerEncryptor.wasm"),
         go.importObject
       ).then((result) => {
         go.run(result.instance);
