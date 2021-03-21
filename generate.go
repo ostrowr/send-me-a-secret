@@ -5,8 +5,12 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"log"
+	"os"
+	"strings"
+	"text/template"
 
 	"golang.org/x/term"
 )
@@ -17,16 +21,41 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("\nGenerating key pair...")
 	keyPair, err := generateKeyPair(password)
 	if err != nil {
 		log.Fatal("Error generating key pair")
 	}
-	fmt.Println(keyPair)
+	fmt.Println("New key pair generated.")
+
+	fillTemplateFile("./decrypt/privateKey.go.template", keyPair)
+	fillTemplateFile("./encrypt/publicKey.go.template", keyPair)
+}
+
+func fillTemplateFile(path string, data interface{}) error {
+	const templateSuffix = ".template"
+	if !strings.HasSuffix(path, templateSuffix) {
+		return errors.New("invalid template name")
+	}
+	t, err := template.ParseFiles(path)
+	if err != nil {
+		return err
+	}
+	f, err := os.Create(strings.TrimSuffix(path, templateSuffix))
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	err = t.Execute(f, data)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 type KeyPair struct {
-	privateKeyPem string
-	publicKeyPem  string
+	PrivateKeyPem string
+	PublicKeyPem  string
 }
 
 func generateKeyPair(password []byte) (*KeyPair, error) {
@@ -63,6 +92,6 @@ func generateKeyPair(password []byte) (*KeyPair, error) {
 		},
 	)
 	return &KeyPair{
-		privateKeyPem: string(privateKeyPem), publicKeyPem: string(publicKeyPem),
+		PrivateKeyPem: string(privateKeyPem), PublicKeyPem: string(publicKeyPem),
 	}, nil
 }
