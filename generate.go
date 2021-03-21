@@ -1,3 +1,5 @@
+//+build ignore
+
 package main
 
 import (
@@ -7,27 +9,22 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 	"text/template"
 
+	"github.com/ostrowr/send-me-a-secret/utils"
 	"golang.org/x/term"
 )
 
 func main() {
 	fmt.Print("Enter Password: ")
 	password, err := term.ReadPassword(0)
-	if err != nil {
-		panic(err)
-	}
+	utils.FatallyLogOnError("Could not read password", err)
 	fmt.Println("\nGenerating key pair...")
 	keyPair, err := generateKeyPair(password)
-	if err != nil {
-		log.Fatal("Error generating key pair")
-	}
+	utils.FatallyLogOnError("Could not generate key pair", err)
 	fmt.Println("New key pair generated.")
-
 	fillTemplateFile("./decrypt/privateKey.go.template", keyPair)
 	fillTemplateFile("./encrypt/publicKey.go.template", keyPair)
 }

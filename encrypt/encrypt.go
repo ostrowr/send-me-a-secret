@@ -15,14 +15,11 @@ import (
 
 func main() {
 	publicKey, err := pemToPublicKey([]byte(publicKeyPem))
-	if err != nil {
-		panic(err) // todo
-	}
-	message := utils.GetMessageFromStdin()
+	utils.FatallyLogOnError("Could not parse public key", err)
+	message, err := utils.GetMessageFromStdin()
+	utils.FatallyLogOnError("Could not read message", err)
 	ciphertext, err := encrypt(publicKey, message)
-	if err != nil {
-		panic(err) // todo
-	}
+	utils.FatallyLogOnError("Failed to encrypt", err)
 	fmt.Println(ciphertext)
 }
 

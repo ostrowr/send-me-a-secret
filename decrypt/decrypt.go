@@ -13,24 +13,16 @@ import (
 )
 
 func main() {
-	encodedCiphertext := string(utils.GetMessageFromStdin())
-	ciphertext, err := base64.StdEncoding.DecodeString(encodedCiphertext)
-	if err != nil {
-		panic(err) // todo
-	}
-
+	encodedCiphertext, err := utils.GetMessageFromStdin()
+	utils.FatallyLogOnError("Could not read ciphertext", err)
+	ciphertext, err := base64.StdEncoding.DecodeString(string(encodedCiphertext))
+	utils.FatallyLogOnError("Could not decode base64 ciphertext", err)
 	password, err := utils.ReadPassword("Enter password: ")
-	if err != nil {
-		panic(err) // todo
-	}
+	utils.FatallyLogOnError("Could not read password", err)
 	privateKey, err := pemToPrivateKey([]byte(privateKeyPem), password)
-	if err != nil {
-		panic(err) // todo
-	}
+	utils.FatallyLogOnError("Could not parse private key", err)
 	message, err := decrypt(privateKey, ciphertext)
-	if err != nil {
-		panic(err) // todo
-	}
+	utils.FatallyLogOnError("Failed to decrypt", err)
 	fmt.Println(string(message))
 }
 

@@ -4,24 +4,23 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"syscall"
 
 	"golang.org/x/term"
 )
 
-func GetMessageFromStdin() []byte {
-	// todo print a nice message if in terminal,
-	// like "paste encrypted message here"
+func GetMessageFromStdin() ([]byte, error) {
 	message := make([]byte, 0)
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		b, err := reader.ReadByte()
 		if err != nil {
 			if err == io.EOF {
-				return message
+				return message, nil
 			}
-			panic(err) // todo
+			return nil, err
 		}
 		message = append(message, b)
 	}
@@ -44,4 +43,10 @@ func ReadPassword(prompt string) ([]byte, error) {
 	pass, err := term.ReadPassword(fd)
 	fmt.Fprintln(os.Stderr)
 	return pass, err
+}
+
+func FatallyLogOnError(message string, err error) {
+	if err != nil {
+		log.Fatal(message, "\nError: ", err)
+	}
 }
