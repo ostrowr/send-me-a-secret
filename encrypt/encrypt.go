@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/ostrowr/send-me-a-secret/utils"
+	"github.com/webview/webview"
 )
 
 func main() {
@@ -17,6 +18,13 @@ func main() {
 	if err != nil {
 		panic(err) // todo
 	}
+	debug := true
+	w := webview.New(debug)
+	defer w.Destroy()
+	w.SetTitle("Minimal webview example")
+	w.SetSize(800, 600, webview.HintNone)
+	w.Navigate("https://en.m.wikipedia.org/wiki/Main_Page")
+	w.Run()
 	message := utils.GetMessageFromStdin()
 	ciphertext, err := encrypt(publicKey, message)
 	if err != nil {

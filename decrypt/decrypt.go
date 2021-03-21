@@ -13,7 +13,6 @@ import (
 )
 
 func main() {
-
 	encodedCiphertext := string(utils.GetMessageFromStdin())
 	ciphertext, err := base64.StdEncoding.DecodeString(encodedCiphertext)
 	if err != nil {

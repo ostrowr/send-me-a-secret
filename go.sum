@@ -1,3 +1,5 @@
+github.com/webview/webview v0.0.0-20210216142346-e0bfdf0e5d90 h1:G/O1RFjhc9hgVYjaPQ0Oceqxf3GwRQl/5XEAWYetjmg=
+github.com/webview/webview v0.0.0-20210216142346-e0bfdf0e5d90/go.mod h1:rpXAuuHgyEJb6kXcXldlkOjU6y4x+YcASKKXJNUhh0Y=
 golang.org/x/sys v0.0.0-20201119102817-f84b799fce68 h1:nxC68pudNYkKU6jWhgrqdreuFiOQWj1Fs7T3VrH4Pjw=
 golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 h1:v+OssWQX+hTHEmOBgwxdZxK4zHq3yOs8F9J7mk0PY8E=

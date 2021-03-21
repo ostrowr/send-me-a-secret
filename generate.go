@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"log"
 
 	"golang.org/x/term"
 )
@@ -18,7 +19,7 @@ func main() {
 	}
 	keyPair, err := generateKeyPair(password)
 	if err != nil {
-		panic(err) // todo
+		log.Fatal("Error generating key pair")
 	}
 	fmt.Println(keyPair)
 }
