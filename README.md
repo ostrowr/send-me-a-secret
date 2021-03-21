@@ -20,6 +20,7 @@ This library allows you to easily do 2 things:
 - Messages are capped at about 500 bytes, since they're encrypted using RSA with a keysize of 4096 bits. If longer messages are necessary, this could be modified to just use RSA for key exchange and then continue with normal AES encryption, but at that point you should probably use an encrypted channel.
 - There is no attempt at authenticated encryption. These secrets are for communicating things like keys once you already have a trusted channel like Slack.
 - Definitely no forward secrecy; we're just encrypting using these RSA keys.
+- Definitely not audited. Probably lots of security issues. Dangerously close to rolling my own encryption.
 
 ## Setting up
 
