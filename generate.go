@@ -25,8 +25,10 @@ func main() {
 	keyPair, err := generateKeyPair(password)
 	utils.FatallyLogOnError("Could not generate key pair", err)
 	fmt.Println("New key pair generated.")
-	fillTemplateFile("./decrypt/privateKey.go.template", keyPair)
-	fillTemplateFile("./encrypt/publicKey.go.template", keyPair)
+	err = fillTemplateFile("./decrypt/privateKey.go.template", keyPair)
+	utils.FatallyLogOnError("Could not fill private key file", err)
+	err = fillTemplateFile("./encrypt/publicKey.go.template", keyPair)
+	utils.FatallyLogOnError("Could not fill public key file", err)
 }
 
 func fillTemplateFile(path string, data interface{}) error {
@@ -42,7 +44,7 @@ func fillTemplateFile(path string, data interface{}) error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer utils.MustClose(f)
 	err = t.Option("missingkey=error").Execute(f, data)
 	if err != nil {
 		return err

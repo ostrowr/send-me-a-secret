@@ -36,7 +36,7 @@ func ReadPassword(prompt string) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		defer tty.Close()
+		defer MustClose(tty)
 		fd = int(tty.Fd())
 	}
 
@@ -49,4 +49,9 @@ func FatallyLogOnError(message string, err error) {
 	if err != nil {
 		log.Fatal(message, "\nError: ", err)
 	}
+}
+
+func MustClose(f *os.File) {
+	err := f.Close()
+	FatallyLogOnError("Error closing file", err)
 }
