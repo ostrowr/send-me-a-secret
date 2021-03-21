@@ -30,15 +30,6 @@
 	textarea:read-only {
   	background-color: #ccc;
 	}
-
-	p {
-		overflow: auto;
-		/* word-wrap: "break-word"; */
-		max-width: 240px;
-		/* white-space: nowrap; */
-  	/* overflow: hidden; */
-  	text-overflow: clip;
-	}
 </style>
 
 
