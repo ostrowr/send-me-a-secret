@@ -2,6 +2,8 @@
 set -e
 set -o xtrace
 
+cd "$(dirname $0)"
+
 
 go build -o build/private/decrypt cmd/decrypt/decrypt.go # Building personal decryptor
 
