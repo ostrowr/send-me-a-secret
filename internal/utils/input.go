@@ -8,6 +8,8 @@ import (
 	"os"
 	"syscall"
 
+	"github.com/fatih/color"
+
 	"golang.org/x/term"
 )
 
@@ -47,6 +49,8 @@ func ReadPassword(prompt string) ([]byte, error) {
 
 func FatallyLogOnError(message string, err error) {
 	if err != nil {
+		color.Set(color.FgRed)
+		defer color.Unset()
 		log.Fatal(message, "\nError: ", err)
 	}
 }
@@ -54,4 +58,24 @@ func FatallyLogOnError(message string, err error) {
 func MustClose(f *os.File) {
 	err := f.Close()
 	FatallyLogOnError("Error closing file", err)
+}
+
+func PrintRed(format string, a ...interface{}) {
+	color.New(color.FgRed).Fprintf(os.Stderr, format, a...)
+}
+
+func PrintCyan(format string, a ...interface{}) {
+	color.New(color.FgCyan).Fprintf(os.Stderr, format, a...)
+}
+
+func PrintGreen(format string, a ...interface{}) {
+	color.New(color.FgGreen).Fprintf(os.Stderr, format, a...)
+}
+
+func PrintYellow(format string, a ...interface{}) {
+	color.New(color.FgYellow).Fprintf(os.Stderr, format, a...)
+}
+
+func PrintDefault(format string, a ...interface{}) {
+	fmt.Fprintf(os.Stderr, format, a...)
 }

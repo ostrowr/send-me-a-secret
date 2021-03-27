@@ -1,3 +1,0 @@
-package encryptor
-
-const publicKeyPem = `{{.PublicKeyPem}}`

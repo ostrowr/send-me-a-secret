@@ -1,3 +1,0 @@
-package decryptor
-
-const privateKeyPem = `{{.PrivateKeyPem}}`
