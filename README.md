@@ -15,9 +15,19 @@ Other alternatives like Signal are probably good – but they require you to mak
 This library allows you to easily do 2 things:
 
 1. Generate a private-public key pair and (optionally) upload the public key to GitHub for anyone to use! After running `initialize`, you shouldn't ever have to remember opaque gpg commands or the path to your private key.
-2. Run a tiny web app that uses `encrypt` compiled into WebAssembly. This way, you can just send somebody a link (e.g. [ostro.ws/send-me-a-secret](https://ostro.ws/send-me-a-secret)) to easily encrypt a message using my public key. If they don't trust their browser (or their browser extensions) they can always download and run the `send-me-a-secrey` binary directly.
+2. Run a tiny web app that uses `encrypt` compiled into WebAssembly. This way, you can just send somebody a link (e.g. [ostro.ws/send-me-a-secret](https://ostro.ws/send-me-a-secret)) to easily encrypt a message using my public key. If they don't trust their browser (or their browser extensions) they can always download and run the `send-me-a-secret` binary directly.
 
-## Usage
+## Usage (sending secrets – encryption)
+
+Anybody can send a secret without installing any software.
+
+Just go to [ostro.ws/send-me-a-secret](https://ostro.ws/send-me-a-secret) and type in your message. Copy the encrypted message and send that to the recipient!
+
+If you don't trust your browser (or browser extensions), you can install the `send-me-a-secret` binary and run
+
+`./send-me-a-secret encrypt --user ostrowr "this message is going to get so encrypted"`
+
+## Usage (receiving secrets – decryption)
 
 First, run `./send-me-a-secret initialize`. This generates new keys and uploads your public key to your GitHub account.
 
@@ -67,7 +77,7 @@ this message is going to get so encrypted
 
 ## Running in the browser
 
-Messages can also be encrypted in the browser. Since public keys are stored in GitHub, you can encrypt a message for anyone who has initialized send-me-a-secret by knowing their GitHub username. If you don't have a GitHub account, you can (soon) also distribute a URL with your key baked in.
+Messages can be encrypted in the browser. Since public keys are stored in GitHub, you can encrypt a message for anyone who has initialized send-me-a-secret by knowing their GitHub username. If you don't have a GitHub account, you can (soon) also distribute a URL with your key baked in.
 
 See [web/browser-me-a-secret](./web/browser-me-a-secret). This is a tiny web-app built in Svelte.
 
