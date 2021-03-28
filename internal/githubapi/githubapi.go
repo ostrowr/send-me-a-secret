@@ -60,10 +60,13 @@ func GetPublicKeyFromGithubUnauthenticated(githubClient *github.Client, username
 		Page:    1,
 		PerPage: 100,
 	}
+
 	allPublicKeys := make([]*github.Key, 0, 10)
 	for {
 		// TODO deal with rate limiting; probably in GetGithubClient
+
 		keys, response, err := githubClient.Users.ListKeys(ctx, username, &options)
+
 		if err != nil {
 			return nil, err
 		}

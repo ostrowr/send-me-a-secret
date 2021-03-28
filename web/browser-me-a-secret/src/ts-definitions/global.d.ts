@@ -4,3 +4,4 @@ declare class Go {
 }
 
 declare var encrypt: any;
+declare var getValidPublicKey: any;
