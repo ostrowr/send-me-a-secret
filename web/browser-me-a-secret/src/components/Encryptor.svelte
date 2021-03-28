@@ -1,6 +1,7 @@
 <script lang="ts">
   export let publicKey: string;
   export let encryptFn: (message: string, publicKey: string) => string;
+  export let username: string;
 
   let message: string | undefined;
 
@@ -21,7 +22,7 @@
 	}
 </style>
 
-<h4>Encrypt a short message using my public key</h4>
+<h4>Encrypt a short message using {username}'s public key</h4>
 <textarea bind:value={message} placeholder="Type message here"></textarea>
 <h3>Encrypted</h3>
 <textarea bind:this={ciphertextElement} readonly>{encryptFn(message ?? "", publicKey ?? "")}</textarea>

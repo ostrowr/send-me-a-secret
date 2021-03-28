@@ -26,24 +26,36 @@ func encryptWrapper() js.Func {
 	return f
 }
 
-func getPublicKeyWrapper() js.Func {
+func getValidPublicKeyWrapper() js.Func {
 	f := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		// if len(args) != 1 {
-		// 	return "No message provided."
-		// }
+		if len(args) != 1 {
+			return "Must provide list of public keys."
+		}
 
-		// 1. Get a list of all public keys (js-land)
-		// 2. Pass that list into this function, which figures out which (if any) are valid
-		// 3. Return the (string) public key back from this function
-		// 4. Run encrypt using the public key returned from this function, parsed yet again.
-
-		return `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACPACro6jmd+F8ZkcS2lmtRsIiuEUwjXDyxr0ZF1U9fBypwF2LzZTqQh0WykHcn0ETycRUonSL8feTLxaPCjv0puUdS7vY16LZsFDDyr4siRfcJFqkD8psf55Fm5bZYvnLkUgUil4dwhk3pKS59OzZrl5su0j01OUf0Ly1WzdiONNtr2U+fNrP5PB3mHCgyhD3rVMEAtVAahbah7PF1aSoCqs4Xazhg5yaGTUiqBREYhqXbQsLNZL4vxLURFF95Ngqn9srWN6neDmyjuWVrH9yKrEnsGYyWcvWdATLj/PslSVsdZ9RKbchxlEoNQVECPV7KVhkaCBGOnQ+tg++7svKhM/NacgoJE/qOnAWMK2mjBEOeuPEgA9qQibD1Ps0XwkHDDyMa9HHCNWTme+s67RUy84mc7wImDJYFn/hTKQgRdY6gTJmOhP/hBsBhbU1U/DYOUXtUzUoE+2eIpewSYshwdM9F7xGwVH+F1ArcUej67Fxl5Fty7talvIyJSYzr10ZIgBxxWijDzZ+wlIn7jwxHIeaZ3ilVPqloBJN/G9zDJZArwm59ALJ7JARDU+FQxXwHxO+TR2AhIGdMg3IF0JVpmQB0rXu/7bip2JraM936DM02494wJj15fxCWBacIugp895gqI8MdacUKQHlCmuDzqXuy67wpI2mokm339rQpG0uyO/U3Ese7i47IdZfHP5JTGNGv7IKAxGtY2Cvmsz/sCDa9ZRED+EzKAMTDTfqF/8HdhsR3WEVsBIwOOX9`
+		var validKey string
+		for i := 0; i < args[0].Length(); i++ {
+			key := args[0].Index(i).String()
+			parsed, err := rsahelpers.SSHPubKeyToRSAPubKey([]byte(key))
+			if err != nil {
+				continue // it's ok if they have some public keys that we can't parse
+			}
+			if rsahelpers.IsValidSendMeASecretKey(parsed) {
+				if validKey != "" {
+					return "Too many valid keys"
+				}
+				validKey = key
+			}
+		}
+		if validKey == "" {
+			return "No valid keys"
+		}
+		return validKey
 	})
 	return f
 }
 
 func main() {
 	js.Global().Set("encrypt", encryptWrapper())
-	js.Global().Set("getPublicKey", getPublicKeyWrapper())
+	js.Global().Set("getValidPublicKey", getValidPublicKeyWrapper())
 	<-make(chan bool) // never exit
 }
