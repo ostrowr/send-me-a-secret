@@ -15,7 +15,7 @@ Other alternatives like Signal are probably good – but they require you to mak
 This library allows you to easily do 2 things:
 
 1. Generate a private-public key pair and (optionally) upload the public key to GitHub for anyone to use! After running `initialize`, you shouldn't ever have to remember opaque gpg commands or the path to your private key.
-2. Run a tiny web app that uses `encrypt` compiled into WebAssembly. This way, you can just send somebody a link (e.g. [ostro.ws/send-me-a-secret](https://ostro.ws/send-me-a-secret)) to easily encrypt a message using my public key. If they don't trust their browser (or their browser extensions) they can always download and run the `send-me-a-secrey` binary directly. This is just a proof-of-concept; I'll improve it so you can encrypt using anyone's public key!
+2. Run a tiny web app that uses `encrypt` compiled into WebAssembly. This way, you can just send somebody a link (e.g. [ostro.ws/send-me-a-secret](https://ostro.ws/send-me-a-secret)) to easily encrypt a message using my public key. If they don't trust their browser (or their browser extensions) they can always download and run the `send-me-a-secrey` binary directly.
 
 ## Usage
 
@@ -67,9 +67,7 @@ this message is going to get so encrypted
 
 ## Running in the browser
 
-Messages can also be encrypted in the browser. Since public keys are stored in GitHub, you can encrypt a message for anyone who has initialized send-me-a-secret by knowing their GitHub username.
-
-(This isn't strictly true yet; my public key is baked in! Still need to allow anyone to encrypt at ostro.ws; for now, just use the `send-me-a-secret encrypt` command.)
+Messages can also be encrypted in the browser. Since public keys are stored in GitHub, you can encrypt a message for anyone who has initialized send-me-a-secret by knowing their GitHub username. If you don't have a GitHub account, you can (soon) also distribute a URL with your key baked in.
 
 See [web/browser-me-a-secret](./web/browser-me-a-secret). This is a tiny web-app built in Svelte.
 
@@ -79,7 +77,11 @@ To deploy to github pages, run `npm run deploy`.
 
 ## Limitations
 
-- Messages are capped at about 500 bytes, since they're encrypted using RSA with a keysize of 4096 bits. If longer messages are necessary, this could be modified to just use RSA for key exchange and then continue with normal AES encryption, but at that point you should probably use an encrypted channel.
+- Messages are capped at about 500 bytes, since they're encrypted using RSA with a keysize of <5000 bits. If longer messages are necessary, this could be modified to just use RSA for key exchange and then continue with normal AES encryption, but at that point you should probably use an encrypted channel.
 - There is no attempt at authenticated encryption. These secrets are for communicating things like keys once you already have a trusted channel like Slack.
 - Definitely no forward secrecy; we're just encrypting using these RSA keys.
 - Definitely not audited. Probably lots of security issues. Dangerously close to rolling my own encryption.
+
+## Trivia
+
+The unauthenticated API for GitHub public keys doesn't return any metadata about the keys. In order to ensure that the key is the right one, send-me-a-secret uses a nontraditional key length and just checks the GitHub account to see if there are any keys of that length. This is very brittle; I'm hoping for ideas here!
