@@ -28,9 +28,9 @@ func encryptWrapper() js.Func {
 
 func getPublicKeyWrapper() js.Func {
 	f := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		if len(args) != 1 {
-			return "No message provided."
-		}
+		// if len(args) != 1 {
+		// 	return "No message provided."
+		// }
 
 		// 1. Get a list of all public keys (js-land)
 		// 2. Pass that list into this function, which figures out which (if any) are valid
