@@ -1,5 +1,2 @@
-publicKey.go
-privateKey.go
-send-me-a-secret
 build/
 *.wasm
