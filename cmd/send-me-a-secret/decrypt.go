@@ -7,9 +7,9 @@ import (
 	"github.com/ostrowr/send-me-a-secret/internal/utils"
 )
 
-func decrypt(privateKeyPassword string, base64EncodedCiphertext string) error {
+func decrypt(privateKeyPassword, base64EncodedCiphertext string) error {
 	if base64EncodedCiphertext == "" {
-		utils.PrintDefault("Waiting for input from stdin... press ctrl-d when done\n")
+		utils.PrintDefaultf("Waiting for input from stdin... press ctrl-d when done\n")
 		messageBytes, err := utils.GetMessageFromStdin()
 		utils.FatallyLogOnError("Couldn't read from stdin", err)
 		base64EncodedCiphertext = string(messageBytes)

@@ -16,16 +16,29 @@ func main() {
 		Name:  "Robbie Ostrow",
 		Email: "sendmeasecret@ostro.ws",
 	}}
-	// app.Description = "sdfsdf"
 	app.Commands = []*cli.Command{
 		{
 			Name:    "initialize",
 			Aliases: []string{"rotate"}, // TODO
 			Flags: []cli.Flag{
-				&cli.BoolFlag{Name: "skip-verify", Usage: "Skip verifying that the keys were persisted to disk and GitHub"},
-				&cli.BoolFlag{Name: "skip-github", Usage: "Don't upload public key to GitHub; instead, just print it out so it can be manually added. --skip-github implies --skip-verify"},
-				&cli.StringFlag{Name: "password", Usage: "Password you'd like to use to encrypt your private key", EnvVars: []string{"SEND_ME_A_SECRET_PASSWORD"}},
-				&cli.StringFlag{Name: "github-token", Usage: "GitHub token with write:public_key access. Ignored if --skip-github is specified.", EnvVars: []string{"GITHUB_TOKEN"}},
+				&cli.BoolFlag{
+					Name:  "skip-verify",
+					Usage: "Skip verifying that the keys were persisted to disk and GitHub",
+				},
+				&cli.BoolFlag{
+					Name:  "skip-github",
+					Usage: "Don't upload public key to GitHub; instead, just print it out so it can be manually added. --skip-github implies --skip-verify",
+				},
+				&cli.StringFlag{
+					Name:    "password",
+					Usage:   "Password you'd like to use to encrypt your private key",
+					EnvVars: []string{"SEND_ME_A_SECRET_PASSWORD"},
+				},
+				&cli.StringFlag{
+					Name:    "github-token",
+					Usage:   "GitHub token with write:public_key access. Ignored if --skip-github is specified.",
+					EnvVars: []string{"GITHUB_TOKEN"},
+				},
 			},
 			Usage: "Generate a new private/public key pair, saving the private key to disk and uploading the public key to GitHub",
 			Action: func(c *cli.Context) error {

@@ -50,7 +50,6 @@ func ReadPassword(prompt string) ([]byte, error) {
 func FatallyLogOnError(message string, err error) {
 	if err != nil {
 		color.Set(color.FgRed)
-		defer color.Unset()
 		log.Fatal(message, "\nError: ", err)
 	}
 }
@@ -60,22 +59,22 @@ func MustClose(f *os.File) {
 	FatallyLogOnError("Error closing file", err)
 }
 
-func PrintRed(format string, a ...interface{}) {
+func PrintRedf(format string, a ...interface{}) {
 	color.New(color.FgRed).Fprintf(os.Stderr, format, a...)
 }
 
-func PrintCyan(format string, a ...interface{}) {
+func PrintCyanf(format string, a ...interface{}) {
 	color.New(color.FgCyan).Fprintf(os.Stderr, format, a...)
 }
 
-func PrintGreen(format string, a ...interface{}) {
+func PrintGreenf(format string, a ...interface{}) {
 	color.New(color.FgGreen).Fprintf(os.Stderr, format, a...)
 }
 
-func PrintYellow(format string, a ...interface{}) {
+func PrintYellowf(format string, a ...interface{}) {
 	color.New(color.FgYellow).Fprintf(os.Stderr, format, a...)
 }
 
-func PrintDefault(format string, a ...interface{}) {
+func PrintDefaultf(format string, a ...interface{}) {
 	fmt.Fprintf(os.Stderr, format, a...)
 }

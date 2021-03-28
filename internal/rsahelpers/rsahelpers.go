@@ -21,23 +21,23 @@ import (
 // to mark a public key as belonging to send-me-a-secret without doing something weird like
 // creating a gist or updating a bio to point to the right key. In the meantime, we'll use this
 // nontraditional key length and assume the user has no other keys of length 4567.
-// Encryption will fail if there is not exactly one key of length WEIRD_KEY_LENGTH in the github user's account.
-const WEIRD_KEY_LENGTH = 4568
+// Encryption will fail if there is not exactly one key of length WeirdKeyLength in the github user's account.
+const WeirdKeyLength = 4568
 
-var KEY_FILENAME = ".send-me-a-secret"
+var KeyFilename = ".send-me-a-secret"
 
 func PathToKeyFile() string {
 	usr, err := user.Current()
 	if err != nil {
 		panic(err)
 	}
-	return filepath.Join(usr.HomeDir, KEY_FILENAME)
+	return filepath.Join(usr.HomeDir, KeyFilename)
 }
 
 // GenerateKey generates a new RSA private key with key length WEIRD_KEY_LENGTH
 func GenerateKey() (*rsa.PrivateKey, error) {
 	rng := rand.Reader
-	return rsa.GenerateKey(rng, WEIRD_KEY_LENGTH)
+	return rsa.GenerateKey(rng, WeirdKeyLength)
 }
 
 // WritePrivateKeyToFile writes an rsa private key to ~/.send-me-a-secret
@@ -48,7 +48,10 @@ func WritePrivateKeyToFile(password []byte, privateKey *rsa.PrivateKey) error {
 	if err != nil {
 		return err
 	}
-	os.Chmod(PathToKeyFile(), 0600)
+	err = os.Chmod(PathToKeyFile(), 0600)
+	if err != nil {
+		return err
+	}
 	defer utils.MustClose(keyfile)
 	return writePrivateKey(password, privateKey, keyfile)
 }
@@ -89,7 +92,7 @@ func ReadPrivateKeyFromFile(password []byte) (*rsa.PrivateKey, error) {
 	return readPrivateKey(password, keyPem)
 }
 
-func readPrivateKey(password []byte, keyPem []byte) (*rsa.PrivateKey, error) {
+func readPrivateKey(password, keyPem []byte) (*rsa.PrivateKey, error) {
 	block, _ := pem.Decode(keyPem)
 	isEncrypted := x509.IsEncryptedPEMBlock(block)
 	pemBytes := block.Bytes
@@ -109,8 +112,8 @@ func GetSSHPublicKey(privateKey *rsa.PrivateKey) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	marshalled := ssh.MarshalAuthorizedKey(publicKey)
-	return marshalled, nil
+	marshaled := ssh.MarshalAuthorizedKey(publicKey)
+	return marshaled, nil
 }
 
 var ErrInvalidPublicKey = errors.New("invalid public key")
@@ -155,5 +158,5 @@ func Decrypt(privateKey *rsa.PrivateKey, base64EncodedCiphertext string) ([]byte
 // Right now, this just checks that length of the key is WEIRD_KEY_LENGTH, hoping that the user doesn't have
 // any other keys of that length, but hopefully in the future we'll be able to do something a bit cleverer.
 func IsValidSendMeASecretKey(publicKey *rsa.PublicKey) bool {
-	return publicKey.Size() == WEIRD_KEY_LENGTH/8
+	return publicKey.Size() == WeirdKeyLength/8
 }

@@ -16,7 +16,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// This is just a random string used as the public key name
+// PublicKeyName is just a random string used as the public key name
 // so it doesn't accidentally collide with other public keys that
 // the user might have. Don't change this string!
 var PublicKeyName = "send-me-a-secret-jwpyl"
@@ -51,10 +51,11 @@ func UploadPublicKeyToGithub(githubClient *github.Client, publicKey string) erro
 var ErrNoValidKeys = errors.New("no valid keys found for user")
 var ErrTooManyValidKeys = errors.New("multiple valid keys found for user; can't decide")
 
-// GetPublicKeyFromGithub fetches an rsa key from `username` on github with the correct keyLength.
+// GetPublicKeyFromGithubUnauthenticated fetches an rsa key from `username` on github with the correct keyLength.
 // (keyLength is hackily used to identify keys generated for send-me-a-secret, since the title is not publicly available.)
-// If there are no valid keys or if there is more than one maching key, this returns an error.
-func GetPublicKeyFromGithubUnauthenticated(githubClient *github.Client, username string, isValidKey func(*rsa.PublicKey) bool) (*rsa.PublicKey, error) {
+// If there are no valid keys or if there is more than one matching key, this returns an error.
+func GetPublicKeyFromGithubUnauthenticated(githubClient *github.Client,
+	username string, isValidKey func(*rsa.PublicKey) bool) (*rsa.PublicKey, error) {
 	ctx := context.Background()
 	options := github.ListOptions{
 		Page:    1,
