@@ -1,5 +1,6 @@
 <script lang="ts">
-	let encryptor: ((message: string) => string) | undefined;
+	let encryptor: ((message: string, publicKey: string) => string) | undefined;
+	let publicKeyer: ((x: string) => string) | undefined;
 	const go = new Go();
 	WebAssembly.instantiateStreaming(
 		fetch("./registerEncryptor.wasm"),
@@ -7,6 +8,7 @@
 	).then((result) => {
 		go.run(result.instance);
 		encryptor = encrypt
+		publicKeyer = getPublicKey
 	});
 	let message: string | undefined;
 	let ciphertextElement: HTMLTextAreaElement;
@@ -18,6 +20,8 @@
 	}
 
 	const queryString = window.location.search;
+	console.log(queryString)
+	console.log(publicKeyer?.("sdf"))
 </script>
 
 <style>
@@ -40,10 +44,10 @@
 	<h4>Encrypt a short message using my public key</h4>
 	<textarea bind:value={message} placeholder="Type message here"></textarea>
 	<h3>Encrypted</h3>
-	{#if !encryptor}
+	{#if !encryptor || !publicKeyer}
 		<p>Loading encryptor...</p>
 	{:else}
-		<textarea bind:this={ciphertextElement} readonly>{encryptor(message ?? "")}</textarea>
+		<textarea bind:this={ciphertextElement} readonly>{encryptor(message ?? "", publicKeyer("d"))}</textarea>
 	{/if}
 	<button on:click={copyCiphertext}>Copy</button>
 </main>
