@@ -10,6 +10,7 @@ import (
 	"context"
 	"crypto/rsa"
 	"errors"
+	"fmt"
 
 	"github.com/google/go-github/v33/github"
 	"github.com/ostrowr/send-me-a-secret/internal/rsahelpers"
@@ -55,15 +56,22 @@ var ErrTooManyValidKeys = errors.New("multiple valid keys found for user; can't 
 // (keyLength is hackily used to identify keys generated for send-me-a-secret, since the title is not publicly available.)
 // If there are no valid keys or if there is more than one maching key, this returns an error.
 func GetPublicKeyFromGithubUnauthenticated(githubClient *github.Client, username string, isValidKey func(*rsa.PublicKey) bool) (*rsa.PublicKey, error) {
+	fmt.Println("here1")
 	ctx := context.Background()
 	options := github.ListOptions{
 		Page:    1,
 		PerPage: 100,
 	}
+	fmt.Println("here2")
+
 	allPublicKeys := make([]*github.Key, 0, 10)
 	for {
 		// TODO deal with rate limiting; probably in GetGithubClient
+		fmt.Println("here4")
+
 		keys, response, err := githubClient.Users.ListKeys(ctx, username, &options)
+		fmt.Println("here5")
+
 		if err != nil {
 			return nil, err
 		}
@@ -73,6 +81,8 @@ func GetPublicKeyFromGithubUnauthenticated(githubClient *github.Client, username
 		}
 		options.Page = response.NextPage
 	}
+
+	fmt.Println("here3")
 
 	validKeys := make([]*rsa.PublicKey, 0, 1)
 

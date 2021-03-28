@@ -16,6 +16,8 @@
 			ciphertextElement.setSelectionRange(0, 99999);
 			document.execCommand("copy");
 	}
+
+	const queryString = window.location.search;
 </script>
 
 <style>
