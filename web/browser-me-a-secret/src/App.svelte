@@ -38,8 +38,6 @@ import GithubSelector from "./components/GithubSelector.svelte";
 			<p>...waiting</p>
 		{:then key}
 			<Encryptor publicKey={key} encryptFn={encryptFn} username={githubUsername}/>
-		{:catch error}
-			<p style="color: red">{error.message}</p>
 		{/await}
 	{/if}
 

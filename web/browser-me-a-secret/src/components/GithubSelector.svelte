@@ -11,7 +11,8 @@
       }
     })
     if (!response.ok) {
-      throw new Error(response.statusText)
+      const errorJson = await response.json()
+      throw new Error(`Error getting keys from GitHub. Code: ${response.status}, Message: ${errorJson.message}`)
     }
     const keys: Key[] = await response.json()
     const validKey = getValidPublicKeyFn(keys.map(k => k.key))
@@ -24,7 +25,9 @@
 </script>
 
 <style>
-
+  pre {
+    overflow: auto;
+  }
 </style>
 
 <input bind:value={username}>

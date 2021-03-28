@@ -41,7 +41,7 @@ func getValidPublicKeyWrapper() js.Func {
 			}
 			if rsahelpers.IsValidSendMeASecretKey(parsed) {
 				if validKey != "" {
-					return "Too many valid keys"
+					return "Too many valid keys. Can't decide."
 				}
 				validKey = key
 			}
