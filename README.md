@@ -23,7 +23,7 @@ Anybody can send a secret without installing any software.
 
 Just go to [ostro.ws/send-me-a-secret](https://ostro.ws/send-me-a-secret) and type in your message. Copy the encrypted message and send that to the recipient!
 
-If you don't trust your browser (or browser extensions), you can install the `send-me-a-secret` binary and run
+There is no tracking code on that website, but if you don't trust your browser (or browser extensions), you can install the `send-me-a-secret` binary and run
 
 `./send-me-a-secret encrypt --user ostrowr "this message is going to get so encrypted"`
 
