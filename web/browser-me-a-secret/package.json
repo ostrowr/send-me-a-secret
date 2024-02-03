@@ -7,6 +7,7 @@
     "dev": "rollup -c -w",
     "start": "sirv public",
     "validate": "svelte-check",
+    "update-wasm": "cp $(go env GOROOT)/misc/wasm/wasm_exec.js public/wasm_exec.js",
     "predeploy": "../../build.sh && npm run build"
   },
   "devDependencies": {
